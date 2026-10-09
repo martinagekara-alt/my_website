@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mama Naliaka's Mboga Hub - Fresh Market</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        mpesa: {
+                            DEFAULT: '#4caf50',
+                            dark: '#388e3c',
+                            green: '#00a000',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #555; }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 0.4; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .pulse-mpesa { animation: pulse-ring 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-brand-800 text-white sticky top-0 z-40 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo & Name -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('shop')">
+                    <div class="w-12 h-12 rounded-full bg-gold-500 flex items-center justify-center text-brand-900 text-2xl font-black shadow-inner border-2 border-white">
+                        🌽
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                            Mama Naliaka's <span class="text-gold-400 font-black">Mboga Hub</span>
+                        </h1>
+                        <p class="text-xs text-brand-100 flex items-center gap-1">
+                            <i class="fa-solid fa-location-dot text-gold-400"></i> Fresh Produce • Kisumu / Nairobi Delivery
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs & Cart Trigger -->
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <button onclick="switchTab('shop')" id="nav-shop-btn" class="px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-brand-700 text-white shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-store"></i> <span class="hidden md:inline">Soko (Shop)</span>
+                    </button>
+                    <button onclick="switchTab('ledger')" id="nav-ledger-btn" class="px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all text-brand-100 hover:bg-brand-700 hover:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-receipt"></i> <span class="hidden md:inline">Sales Ledger</span>
+                    </button>
+                    
+                    <!-- Basket Button -->
+                    <button onclick="openCartDrawer()" class="relative p-2.5 bg-gold-500 hover:bg-gold-600 text-brand-900 rounded-xl transition-all shadow-md font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-basket-shopping text-lg"></i>
+                        <span class="hidden sm:inline text-xs font-extrabold uppercase">Basket</span>
+                        <span id="cart-badge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Banner bar -->
+        <div class="bg-brand-900/60 py-1.5 px-4 text-center text-xs text-gold-400 font-medium border-t border-brand-700/50 flex items-center justify-center gap-2">
+            <span>🚀 Lipa na M-PESA STK Push Enabled</span>
+            <span class="hidden sm:inline">•</span>
+            <span class="hidden sm:inline">🌱 100% Organic Local Farm Fresh Vegetables</span>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- SHOP TAB -->
+        <div id="tab-shop" class="space-y-6">
+            
+            <!-- Hero Banner -->
+            <div class="relative bg-gradient-to-r from-brand-800 to-brand-600 rounded-3xl p-6 sm:p-8 text-white overflow-hidden shadow-xl">
+                <div class="absolute -right-8 -bottom-8 opacity-15 text-9xl pointer-events-none select-none">🥦</div>
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-block bg-gold-500/20 text-gold-300 border border-gold-500/30 font-bold text-xs uppercase tracking-wider px-3 py-1 rounded-full mb-3">
+                        Kila Siku Safi (Fresh Every Day)
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-2">
+                        Karibu Mama Naliaka's Mboga Market!
+                    </h2>
+                    <p class="text-brand-100 text-sm sm:text-base mb-6">
+                        Order your daily organic greens, fresh tomatoes, onions, indigenous vegetables, and root crops delivered straight to your door or estate stage!
+                    </p>
+                    
+                    <!-- Search & Filter Bar -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <div class="relative flex-grow">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-stone-400"></i>
+                            <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Tafuta Sukuma, Nyanya, Managu..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white text-stone-800 placeholder-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 shadow-inner">
+                        </div>
+                        <div class="flex gap-2 overflow-x-auto pb-1 sm:pb-0 custom-scrollbar">
+                            <button onclick="setCategoryFilter('all')" class="cat-filter-btn active bg-gold-500 text-brand-900 font-bold px-4 py-2.5 rounded-xl text-xs whitespace-nowrap shadow transition-all">All Items</button>
+                            <button onclick="setCategoryFilter('kumi')" class="cat-filter-btn bg-brand-700/80 hover:bg-brand-700 text-white font-medium px-4 py-2.5 rounded-xl text-xs whitespace-nowrap transition-all">Kumi Kumi (Ksh 10 - 50)</button>
+                            <button onclick="setCategoryFilter('greens')" class="cat-filter-btn bg-brand-700/80 hover:bg-brand-700 text-white font-medium px-4 py-2.5 rounded-xl text-xs whitespace-nowrap transition-all">Indigenous Greens</button>
+                            <button onclick="setCategoryFilter('roots')" class="cat-filter-btn bg-brand-700/80 hover:bg-brand-700 text-white font-medium px-4 py-2.5 rounded-xl text-xs whitespace-nowrap transition-all">Roots & Tubers</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Grid Section -->
+            <div class="flex items-center justify-between pt-2">
+                <h3 class="text-lg font-bold text-stone-800 flex items-center gap-2">
+                    <i class="fa-solid fa-leaf text-brand-600"></i> Available Produce
+                </h3>
+                <span id="product-count" class="text-xs font-semibold text-stone-500 bg-stone-200 px-2.5 py-1 rounded-full">8 items found</span>
+            </div>
+
+            <!-- Produce Cards Grid -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                <!-- Dynamically Populated via JS -->
+            </div>
+        </div>
+
+        <!-- LEDGER TAB -->
+        <div id="tab-ledger" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-stone-800 flex items-center gap-2">
+                            <i class="fa-solid fa-book-journal-whills text-brand-600"></i> Mama Mboga Sales Ledger
+                        </h2>
+                        <p class="text-xs text-stone-500">Live record of M-PESA payments received and customer orders.</p>
+                    </div>
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <div class="bg-stone-100 p-2.5 rounded-xl text-right flex-1 sm:flex-initial">
+                            <span class="text-xs text-stone-500 block">Total Revenue</span>
+                            <span id="ledger-total-revenue" class="text-lg font-extrabold text-brand-700">Ksh 0</span>
+                        </div>
+                        <button onclick="clearLedgerHistory()" class="text-xs text-red-600 hover:text-red-700 font-semibold p-2 rounded-lg border border-red-200 hover:bg-red-50 transition">
+                            <i class="fa-solid fa-trash-can"></i> Clear
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ledger Table / List -->
+                <div class="overflow-x-auto rounded-xl border border-stone-200">
+                    <table class="w-full text-left text-sm text-stone-600">
+                        <thead class="bg-stone-100 text-xs text-stone-700 uppercase font-bold border-b border-stone-200">
+                            <tr>
+                                <th class="p-3.5">Code</th>
+                                <th class="p-3.5">Customer</th>
+                                <th class="p-3.5">Location</th>
+                                <th class="p-3.5">Items</th>
+                                <th class="p-3.5 text-right">Amount</th>
+                                <th class="p-3.5 text-center">Status</th>
+                                <th class="p-3.5 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledger-rows" class="divide-y divide-stone-100">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Shopping Cart Drawer Overlay & Drawer -->
+    <div id="cart-drawer-overlay" onclick="closeCartDrawer()" class="fixed inset-0 bg-stone-900/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <div id="cart-drawer" class="fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        <!-- Drawer Header -->
+        <div class="p-5 bg-brand-800 text-white flex items-center justify-between border-b border-brand-700">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-basket-shopping text-gold-400 text-xl"></i>
+                <div>
+                    <h3 class="font-bold text-lg leading-tight">Your Vegetable Basket</h3>
+                    <p class="text-xs text-brand-200">Selected fresh ingredients</p>
+                </div>
+            </div>
+            <button onclick="closeCartDrawer()" class="text-brand-200 hover:text-white p-2 rounded-lg text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Drawer Items List -->
+        <div id="cart-items-container" class="flex-grow overflow-y-auto p-5 space-y-4 custom-scrollbar">
+            <!-- Items rendered via JS -->
+        </div>
+
+        <!-- Cart Summary Footer -->
+        <div class="p-5 bg-stone-50 border-t border-stone-200 space-y-4">
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between text-stone-600">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal" class="font-semibold text-stone-800">Ksh 0</span>
+                </div>
+                <div class="flex justify-between text-stone-600">
+                    <span>Delivery Fee (Bodaboda)</span>
+                    <span id="cart-delivery" class="font-semibold text-stone-800">Ksh 50</span>
+                </div>
+                <div class="flex justify-between text-base font-extrabold text-stone-900 pt-2 border-t border-stone-200">
+                    <span>Total Amount</span>
+                    <span id="cart-total" class="text-brand-700">Ksh 50</span>
+                </div>
+            </div>
+
+            <button onclick="proceedToCheckout()" id="checkout-btn" disabled class="w-full bg-brand-600 hover:bg-brand-700 disabled:bg-stone-300 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-base">
+                <span>Proceed to Checkout</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 bg-stone-900/60 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-5 bg-stone-900 text-white flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-full bg-mpesa-green flex items-center justify-center font-bold text-xs">M</div>
+                    <h3 class="font-bold text-lg">Delivery & M-PESA Checkout</h3>
+                </div>
+                <button onclick="closeModal('checkout-modal')" class="text-stone-400 hover:text-white p-1 text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="checkout-form" onsubmit="triggerMpesaSTKPush(event)" class="p-6 space-y-4 overflow-y-auto custom-scrollbar">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Customer Full Name *</label>
+                    <input type="text" id="cust-name" required placeholder="e.g. Wanjiku Kamau / Otieno Juma" class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Delivery Estate/Location *</label>
+                        <input type="text" id="cust-location" required placeholder="e.g. Milimani / Kilimani / Stage" class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">House No. / Landmark</label>
+                        <input type="text" id="cust-house" placeholder="e.g. House B4 / Near Shop" class="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">M-PESA Phone Number *</label>
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-2.5 text-sm font-semibold text-stone-500">+254</span>
+                        <input type="tel" id="cust-phone" required pattern="(07|01)[0-9]{8}" placeholder="712345678" class="w-full pl-16 pr-4 py-2.5 rounded-xl border border-stone-300 text-sm font-semibold text-stone-800 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                    </div>
+                    <span class="text-[11px] text-stone-400 mt-1 block">Format: 07XXXXXXXX or 01XXXXXXXX</span>
+                </div>
+
+                <!-- Order Summary Mini Card -->
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2">
+                    <div class="flex justify-between text-xs text-stone-500">
+                        <span>Items Count:</span>
+                        <span id="checkout-items-count" class="font-bold text-stone-700">0 items</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-extrabold text-stone-900 border-t border-stone-200 pt-2">
+                        <span>Total Payable:</span>
+                        <span id="checkout-total-amount" class="text-brand-700">Ksh 0</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-mpesa-green hover:bg-mpesa-dark text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-mobile-screen-button text-lg"></i>
+                    <span>Pay with M-PESA STK Push</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- M-PESA STK Simulation Modal -->
+    <div id="mpesa-stk-modal" class="fixed inset-0 bg-stone-900/80 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-stone-900 text-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-stone-800 text-center space-y-6">
+            
+            <!-- STK Phone Graphic -->
+            <div class="relative w-20 h-20 mx-auto flex items-center justify-center">
+                <div id="stk-pulse" class="absolute inset-0 bg-mpesa-green/30 rounded-full pulse-mpesa"></div>
+                <div class="w-16 h-16 bg-mpesa-green rounded-full flex items-center justify-center text-white text-3xl font-extrabold shadow-lg z-10">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+            </div>
+
+            <div>
+                <h3 id="stk-title" class="text-xl font-black text-white">Sending STK Push...</h3>
+                <p id="stk-subtitle" class="text-xs text-stone-400 mt-2">Please check your phone screen for the M-PESA payment prompt.</p>
+            </div>
+
+            <!-- Interactive Simulated Phone Screen Prompt -->
+            <div id="stk-pin-box" class="bg-stone-800 p-4 rounded-2xl border border-stone-700 text-left space-y-3 hidden">
+                <div class="text-[11px] font-mono text-stone-300 bg-stone-950 p-3 rounded-lg border border-stone-800">
+                    <p class="text-mpesa-green font-bold">M-PESA Express</p>
+                    <p class="mt-1">Pay Ksh <span id="stk-amount-text" class="text-white font-bold">0</span> to <span class="text-white font-bold">Mama Naliaka Mboga Hub</span>?</p>
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-wider text-stone-400 mb-1">Enter 4-Digit M-PESA PIN (Simulated)</label>
+                    <input type="password" id="stk-pin-input" maxlength="4" placeholder="••••" class="w-full text-center tracking-widest text-lg font-bold py-2 rounded-lg bg-stone-950 text-white border border-stone-700 focus:outline-none focus:border-mpesa-green">
+                </div>
+                <button onclick="submitMpesaPin()" class="w-full bg-mpesa-green text-white font-bold py-2 rounded-lg text-xs uppercase tracking-wider hover:bg-mpesa-dark transition">
+                    Submit PIN
+                </button>
+            </div>
+
+            <!-- Status Indicator -->
+            <div class="flex items-center justify-center gap-2 text-xs font-semibold text-gold-400">
+                <i id="stk-spinner" class="fa-solid fa-circle-notch fa-spin text-sm"></i>
+                <span id="stk-status-text">Connecting to Safaricom...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div id="receipt-modal" class="fixed inset-0 bg-stone-900/60 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden flex flex-col">
+            <div class="p-5 bg-brand-800 text-white flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check text-gold-400 text-xl"></i>
+                    <h3 class="font-bold text-lg">Transaction Complete!</h3>
+                </div>
+                <button onclick="closeModal('receipt-modal')" class="text-brand-200 hover:text-white p-1 text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Receipt Content for Print/Display -->
+            <div id="printable-receipt" class="p-6 space-y-4 bg-stone-50 font-sans text-stone-800">
+                <!-- Header -->
+                <div class="text-center border-b border-dashed border-stone-300 pb-4">
+                    <h2 class="font-black text-xl text-brand-900">MAMA NALIAKA MBOGA HUB</h2>
+                    <p class="text-xs text-stone-500">Fresh Local Vegetable & Grocery Vendor</p>
+                    <p class="text-[11px] text-stone-400 mt-0.5">Kisumu / Nairobi, Kenya • Tel: 0712 345 678</p>
+                </div>
+
+                <!-- Transaction Details -->
+                <div class="bg-white p-3 rounded-xl border border-stone-200 text-xs space-y-1.5">
+                    <div class="flex justify-between">
+                        <span class="text-stone-500">M-PESA Code:</span>
+                        <span id="rec-code" class="font-mono font-bold text-brand-800">QK89XJ12AB</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-stone-500">Date & Time:</span>
+                        <span id="rec-date" class="font-medium text-stone-700">09 Oct 2026, 10:30 AM</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-stone-500">Customer:</span>
+                        <span id="rec-name" class="font-medium text-stone-700">Achieng Odhiambo</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-stone-500">Location:</span>
+                        <span id="rec-location" class="font-medium text-stone-700">Milimani Estate</span>
+                    </div>
+                </div>
+
+                <!-- Purchased Items List -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-2">Purchased Items</h4>
+                    <div id="rec-items-list" class="space-y-1.5 text-xs">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="border-t border-dashed border-stone-300 pt-3 space-y-1 text-xs">
+                    <div class="flex justify-between text-stone-600">
+                        <span>Items Subtotal:</span>
+                        <span id="rec-subtotal">Ksh 0</span>
+                    </div>
+                    <div class="flex justify-between text-stone-600">
+                        <span>Bodaboda Delivery:</span>
+                        <span id="rec-delivery">Ksh 50</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-extrabold text-stone-900 pt-1 border-t border-stone-200">
+                        <span>Total Paid (M-PESA):</span>
+                        <span id="rec-total" class="text-brand-700">Ksh 0</span>
+                    </div>
+                </div>
+
+                <div class="text-center pt-2 text-[11px] text-stone-500 font-medium">
+                    <p>Asante sana kwa kununua mboga kwetu! 🥬</p>
+                    <p class="text-[10px] text-stone-400">Karibu Tena • Fresh Produce Guaranteed</p>
+                </div>
+            </div>
+
+            <div class="p-4 bg-white border-t border-stone-200 flex gap-3">
+                <button onclick="printReceipt()" class="flex-1 bg-stone-800 hover:bg-stone-900 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-print"></i> Print Receipt
+                </button>
+                <button onclick="closeModal('receipt-modal')" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-stone-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-xs font-semibold border border-stone-700 pointer-events-none">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-brand-500 text-lg"></i>
+        <span id="toast-message">Action successful!</span>
+    </div>
+
+    <script>
+        // --- DATA STATE ---
+        const PRODUCTS = [
+            { id: 'p1', name: 'Sukuma Wiki (Collard Greens)', category: 'kumi', price: 20, unit: 'bundle', icon: '🥬', desc: 'Fresh, crisp green collard leaves.' },
+            { id: 'p2', name: 'Spinach', category: 'greens', price: 30, unit: 'bundle', icon: '🍃', desc: 'Nutritious tender spinach leaves.' },
+            { id: 'p3', name: 'Managu (African Nightshade)', category: 'greens', price: 50, unit: 'bundle', icon: '🌱', desc: 'Traditional indigenous African greens.' },
+            { id: 'p4', name: 'Terere (Amaranth Leaves)', category: 'greens', price: 40, unit: 'bundle', icon: '🌿', desc: 'Healthy traditional greens.' },
+            { id: 'p5', name: 'Kunde (Cowpea Leaves)', category: 'greens', price: 40, unit: 'bundle', icon: '🥬', desc: 'Fresh indigenous cowpea leaves.' },
+            { id: 'p6', name: 'Nyanya Safi (Tomatoes)', category: 'kumi', price: 50, unit: 'pile (5 pcs)', icon: '🍅', desc: 'Ripe, sweet local tomatoes.' },
+            { id: 'p7', name: 'Kitunguu Maji (Red Onions)', category: 'kumi', price: 40, unit: 'pile (4 pcs)', icon: '🧅', desc: 'Dry red cooking onions.' },
+            { id: 'p8', name: 'Dania (Coriander)', category: 'kumi', price: 10, unit: 'bunch', icon: '🌿', desc: 'Aromatic fresh coriander.' },
+            { id: 'p9', name: 'Hoho (Green Capsicum)', category: 'kumi', price: 30, unit: '3 pcs', icon: '🫑', desc: 'Fresh green bell peppers.' },
+            { id: 'p10', name: 'Mhogo (Fresh Cassava)', category: 'roots', price: 100, unit: 'kg', icon: '🥔', desc: 'Sweet sweet cassava roots.' },
+            { id: 'p11', name: 'Nduma (Arrowroots)', category: 'roots', price: 150, unit: 'kg', icon: '🥔', desc: 'Fresh organic arrowroots.' },
+            { id: 'p12', name: 'Viazi Tamu (Sweet Potatoes)', category: 'roots', price: 80, unit: 'kg', icon: '🍠', desc: 'Yellow-fleshed sweet potatoes.' }
+        ];
+
+        let cart = [];
+        let salesLedger = [];
+        let activeCategory = 'all';
+        let activeCheckoutData = null;
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            loadStoredLedger();
+            updateCartUI();
+        });
+
+        // --- NAVIGATION TABS ---
+        function switchTab(tab) {
+            const shopTab = document.getElementById('tab-shop');
+            const ledgerTab = document.getElementById('tab-ledger');
+            const shopBtn = document.getElementById('nav-shop-btn');
+            const ledgerBtn = document.getElementById('nav-ledger-btn');
+
+            if (tab === 'shop') {
+                shopTab.classList.remove('hidden');
+                ledgerTab.classList.add('hidden');
+                shopBtn.className = "px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-brand-700 text-white shadow-sm flex items-center gap-2";
+                ledgerBtn.className = "px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all text-brand-100 hover:bg-brand-700 hover:text-white flex items-center gap-2";
+            } else {
+                shopTab.classList.add('hidden');
+                ledgerTab.classList.remove('hidden');
+                ledgerBtn.className = "px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-brand-700 text-white shadow-sm flex items-center gap-2";
+                shopBtn.className = "px-3 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-all text-brand-100 hover:bg-brand-700 hover:text-white flex items-center gap-2";
+                renderLedgerTable();
+            }
+        }
+
+        // --- PRODUCT RENDERING & FILTERING ---
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            
+            const filtered = PRODUCTS.filter(p => {
+                const matchesSearch = p.name.toLowerCase().includes(searchVal) || p.desc.toLowerCase().includes(searchVal);
+                const matchesCat = activeCategory === 'all' || p.category === activeCategory;
+                return matchesSearch && matchesCat;
+            });
+
+            document.getElementById('product-count').textContent = `${filtered.length} items found`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-stone-400 space-y-2">
+                        <i class="fa-solid fa-leaf text-4xl"></i>
+                        <p class="font-medium text-stone-600">Hakuna Mboga! No items match your search.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-all border border-stone-200/80 flex flex-col justify-between group">
+                    <div>
+                        <div class="w-full h-32 bg-brand-50/60 rounded-xl flex items-center justify-center text-5xl mb-3 group-hover:scale-105 transition-transform">
+                            ${p.icon}
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h4 class="font-bold text-stone-800 text-base leading-snug">${p.name}</h4>
+                            <span class="bg-brand-100 text-brand-800 text-[11px] font-black px-2 py-0.5 rounded-md whitespace-nowrap">
+                                Ksh ${p.price}
+                            </span>
+                        </div>
+                        <p class="text-xs text-stone-500 mb-3">${p.desc}</p>
+                    </div>
+
+                    <div class="pt-2 border-t border-stone-100 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-stone-400">per ${p.unit}</span>
+                        <button onclick="addToCart('${p.id}')" class="bg-brand-600 hover:bg-brand-700 active:scale-95 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-plus"></i> Add Basket
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts() {
+            renderProducts();
+        }
+
+        function setCategoryFilter(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+                btn.className = "cat-filter-btn bg-brand-700/80 hover:bg-brand-700 text-white font-medium px-4 py-2.5 rounded-xl text-xs whitespace-nowrap transition-all";
+            });
+            event.target.className = "cat-filter-btn active bg-gold-500 text-brand-900 font-bold px-4 py-2.5 rounded-xl text-xs whitespace-nowrap shadow transition-all";
+            renderProducts();
+        }
+
+        // --- CART OPERATIONS ---
+        function addToCart(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+
+            updateCartUI();
+            showToast(`Added ${product.name} to basket!`);
+        }
+
+        function updateCartQty(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    cart = cart.filter(i => i.id !== productId);
+                }
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const totalItemsCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const deliveryFee = subtotal > 0 ? 50 : 0;
+            const total = subtotal + deliveryFee;
+
+            // Badges & Buttons
+            document.getElementById('cart-badge').textContent = totalItemsCount;
+            document.getElementById('checkout-btn').disabled = cart.length === 0;
+
+            // Summary Totals
+            document.getElementById('cart-subtotal').textContent = `Ksh ${subtotal}`;
+            document.getElementById('cart-delivery').textContent = `Ksh ${deliveryFee}`;
+            document.getElementById('cart-total').textContent = `Ksh ${total}`;
+
+            // Drawer Items Container
+            const container = document.getElementById('cart-items-container');
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 text-stone-400 space-y-3">
+                        <i class="fa-solid fa-basket-shopping text-5xl text-stone-300"></i>
+                        <p class="font-bold text-stone-600">Basket Yako Iko Wazi!</p>
+                        <p class="text-xs">Your basket is empty. Select fresh vegetables from the market catalog.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="flex items-center justify-between p-3 bg-stone-50 rounded-2xl border border-stone-200">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-2xl border border-stone-200">
+                            ${item.icon}
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-xs text-stone-800 line-clamp-1">${item.name}</h5>
+                            <p class="text-[11px] font-bold text-brand-700">Ksh ${item.price} <span class="text-stone-400 font-normal">/ ${item.unit}</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <button onclick="updateCartQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-white border border-stone-300 hover:bg-stone-100 flex items-center justify-center font-bold text-stone-700 text-xs">
+                            -
+                        </button>
+                        <span class="text-xs font-bold text-stone-800 w-5 text-center">${item.qty}</span>
+                        <button onclick="updateCartQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-white border border-stone-300 hover:bg-stone-100 flex items-center justify-center font-bold text-stone-700 text-xs">
+                            +
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openCartDrawer() {
+            document.getElementById('cart-drawer-overlay').classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('cart-drawer').classList.remove('translate-x-full');
+        }
+
+        function closeCartDrawer() {
+            document.getElementById('cart-drawer-overlay').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('cart-drawer').classList.add('translate-x-full');
+        }
+
+        // --- CHECKOUT & M-PESA STK SIMULATION ---
+        function proceedToCheckout() {
+            closeCartDrawer();
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const total = subtotal + 50;
+
+            document.getElementById('checkout-items-count').textContent = `${cart.reduce((s,i) => s+i.qty, 0)} items`;
+            document.getElementById('checkout-total-amount').textContent = `Ksh ${total}`;
+            openModal('checkout-modal');
+        }
+
+        function triggerMpesaSTKPush(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('cust-name').value;
+            const location = document.getElementById('cust-location').value;
+            const house = document.getElementById('cust-house').value;
+            const phone = '254' + document.getElementById('cust-phone').value;
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const total = subtotal + 50;
+
+            activeCheckoutData = {
+                name,
+                location: `${location} ${house ? '(' + house + ')' : ''}`,
+                phone,
+                items: [...cart],
+                subtotal,
+                delivery: 50,
+                total,
+                date: new Date().toLocaleString('en-KE', { dateStyle: 'medium', timeStyle: 'short' }),
+                code: generateMpesaCode()
+            };
+
+            closeModal('checkout-modal');
+            openModal('mpesa-stk-modal');
+
+            // Reset STK UI
+            document.getElementById('stk-title').textContent = "Sending STK Push...";
+            document.getElementById('stk-subtitle').textContent = `Initiating M-PESA payment request to +${phone}`;
+            document.getElementById('stk-status-text').textContent = "Waiting for Safaricom Network...";
+            document.getElementById('stk-pin-box').classList.add('hidden');
+            document.getElementById('stk-pin-input').value = '';
+
+            // Simulate STK Arrival
+            setTimeout(() => {
+                document.getElementById('stk-title').textContent = "Enter M-PESA PIN";
+                document.getElementById('stk-subtitle').textContent = "Prompt sent to phone. Enter PIN to complete purchase.";
+                document.getElementById('stk-amount-text').textContent = total;
+                document.getElementById('stk-status-text').textContent = "Awaiting user input on phone...";
+                document.getElementById('stk-pin-box').classList.remove('hidden');
+                document.getElementById('stk-pin-input').focus();
+            }, 1500);
+        }
+
+        function submitMpesaPin() {
+            const pin = document.getElementById('stk-pin-input').value;
+            if (pin.length < 4) {
+                showToast("Please enter a valid 4-digit PIN!");
+                return;
+            }
+
+            document.getElementById('stk-pin-box').classList.add('hidden');
+            document.getElementById('stk-title').textContent = "Processing Payment...";
+            document.getElementById('stk-status-text').textContent = "Validating M-PESA Transaction...";
+
+            setTimeout(() => {
+                closeModal('mpesa-stk-modal');
+                completeTransaction();
+            }, 2000);
+        }
+
+        function completeTransaction() {
+            // Add to sales ledger
+            salesLedger.unshift(activeCheckoutData);
+            saveLedger();
+
+            // Render receipt
+            document.getElementById('rec-code').textContent = activeCheckoutData.code;
+            document.getElementById('rec-date').textContent = activeCheckoutData.date;
+            document.getElementById('rec-name').textContent = activeCheckoutData.name;
+            document.getElementById('rec-location').textContent = activeCheckoutData.location;
+            document.getElementById('rec-subtotal').textContent = `Ksh ${activeCheckoutData.subtotal}`;
+            document.getElementById('rec-delivery').textContent = `Ksh ${activeCheckoutData.delivery}`;
+            document.getElementById('rec-total').textContent = `Ksh ${activeCheckoutData.total}`;
+
+            document.getElementById('rec-items-list').innerHTML = activeCheckoutData.items.map(i => `
+                <div class="flex justify-between text-stone-700">
+                    <span>${i.qty}x ${i.name}</span>
+                    <span class="font-medium">Ksh ${i.price * i.qty}</span>
+                </div>
+            `).join('');
+
+            // Reset Cart
+            cart = [];
+            updateCartUI();
+
+            openModal('receipt-modal');
+            showToast("Payment Received! Order has been placed.");
+        }
+
+        // --- SALES LEDGER MANAGEMENT ---
+        function saveLedger() {
+            localStorage.setItem('mama_mboga_ledger', JSON.stringify(salesLedger));
+            renderLedgerTable();
+        }
+
+        function loadStoredLedger() {
+            const stored = localStorage.getItem('mama_mboga_ledger');
+            if (stored) {
+                salesLedger = JSON.parse(stored);
+            } else {
+                // Pre-populate mock initial transaction for realistic look
+                salesLedger = [{
+                    code: 'QK89XJ12AB',
+                    name: 'Mama Mercy',
+                    location: 'Kondele, Stage 2',
+                    phone: '254712345678',
+                    items: [{ name: 'Sukuma Wiki', qty: 2, price: 20 }, { name: 'Nyanya Safi', qty: 1, price: 50 }],
+                    subtotal: 90,
+                    delivery: 50,
+                    total: 140,
+                    date: '09 Oct 2026, 08:15 AM'
+                }];
+            }
+            renderLedgerTable();
+        }
+
+        function renderLedgerTable() {
+            const tbody = document.getElementById('ledger-rows');
+            const totalRevElement = document.getElementById('ledger-total-revenue');
+
+            const grandTotal = salesLedger.reduce((sum, item) => sum + item.total, 0);
+            totalRevElement.textContent = `Ksh ${grandTotal}`;
+
+            if (salesLedger.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-8 text-stone-400 text-xs">
+                            No recorded sales yet. Place an order to see transactions here!
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = salesLedger.map((tx, idx) => `
+                <tr class="hover:bg-stone-50/80 transition">
+                    <td class="p-3.5 font-mono font-bold text-brand-800 text-xs">${tx.code}</td>
+                    <td class="p-3.5 font-semibold text-stone-800 text-xs">${tx.name}</td>
+                    <td class="p-3.5 text-xs text-stone-600">${tx.location}</td>
+                    <td class="p-3.5 text-xs text-stone-500">${tx.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</td>
+                    <td class="p-3.5 text-right font-bold text-stone-800 text-xs">Ksh ${tx.total}</td>
+                    <td class="p-3.5 text-center">
+                        <span class="bg-green-100 text-green-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Completed</span>
+                    </td>
+                    <td class="p-3.5 text-center">
+                        <button onclick="viewHistoricalReceipt(${idx})" class="text-brand-600 hover:text-brand-800 font-bold text-xs underline">
+                            View Receipt
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function viewHistoricalReceipt(idx) {
+            const tx = salesLedger[idx];
+            document.getElementById('rec-code').textContent = tx.code;
+            document.getElementById('rec-date').textContent = tx.date;
+            document.getElementById('rec-name').textContent = tx.name;
+            document.getElementById('rec-location').textContent = tx.location;
+            document.getElementById('rec-subtotal').textContent = `Ksh ${tx.subtotal}`;
+            document.getElementById('rec-delivery').textContent = `Ksh ${tx.delivery}`;
+            document.getElementById('rec-total').textContent = `Ksh ${tx.total}`;
+
+            document.getElementById('rec-items-list').innerHTML = tx.items.map(i => `
+                <div class="flex justify-between text-stone-700">
+                    <span>${i.qty}x ${i.name}</span>
+                    <span class="font-medium">Ksh ${i.price * i.qty}</span>
+                </div>
+            `).join('');
+
+            openModal('receipt-modal');
+        }
+
+        function clearLedgerHistory() {
+            if (confirm("Are you sure you want to clear the transactions sales ledger?")) {
+                salesLedger = [];
+                saveLedger();
+                showToast("Sales ledger cleared!");
+            }
+        }
+
+        // --- UTILITY FUNCTIONS ---
+        function generateMpesaCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = 'Q';
+            for (let i = 0; i < 9; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function printReceipt() {
+            window.print();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
